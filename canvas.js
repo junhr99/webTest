@@ -101,7 +101,7 @@ function tool_pencil() {
   // 마우스가 이동하는 동안 계속 호출하여 Canvas에 Line을 그려 나간다
   this.touchmove = function (ev) {
     if (tool.started) {
-      //ev.preventDefault();
+      ev.preventDefault();
       context.lineTo(ev._x, ev._y);
       context.stroke();
     }
@@ -153,8 +153,8 @@ function ev_canvas(ev) {
     var bound = canvas.getBoundingClientRect();
     //ev._x = ev.targetTouches[0].pageX - left;
     //ev._y = ev.targetTouches[0].pageY - top;
-    ev._x = ev.changedTouches[0].pageX - canvas.offsetLeft;
-    ev._y = ev.changedTouches[0].pageY - canvas.offsetTop;
+    ev._x = ev.targetTouches[0].pageX - canvas.offsetLeft;
+    ev._y = ev.targetTouches[0].pageY - canvas.offsetTop;
     //ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
     //ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
     //ev._x =(ev.targetTouches[0].pageX - bound.left) * (canvas.width / bound.width);
