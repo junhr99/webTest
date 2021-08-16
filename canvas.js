@@ -29,6 +29,7 @@ function init() {
   context.lineWidth = 1.5; // 선 굵기를 1.5로 설정
   context.strokeStyle = "white";
   context.lineCap = "round";
+  /*
 
   // 마우스 리스너 등록. e는 MouseEvent 객체
   canvas.addEventListener(
@@ -59,8 +60,11 @@ function init() {
     },
     false
   ); // 캔버스에서 마우스가 벗어났을 때 발생되는 이벤트
-
+*/
   tool = new tool_pencil();
+  canvas.addEventListener("mousedown", ev_canvas, false);
+  canvas.addEventListener("mousemove", ev_canvas, false);
+  canvas.addEventListener("mouseup", ev_canvas, false);
   canvas.addEventListener("touchstart", ev_canvas, false);
   canvas.addEventListener("touchmove", ev_canvas, false);
   canvas.addEventListener("touchend", ev_canvas, false);
@@ -69,7 +73,25 @@ function init() {
 function tool_pencil() {
   var tool = this;
   this.started = false;
-
+  this.mousedown = function (ev) {
+    context.beginPath();
+    context.moveTo(ev._x, ev._y);
+    tool.started = true;
+  };
+  // 마우스가 이동하는 동안 계속 호출하여 Canvas에 Line을 그려 나간다
+  this.mousemove = function (ev) {
+    if (tool.started) {
+      context.lineTo(ev._x, ev._y);
+      context.stroke();
+    }
+  };
+  // 마우스 떼면 그리기 작업을 중단한다
+  this.mouseup = function (ev) {
+    if (tool.started) {
+      tool.mousemove(ev);
+      tool.started = false;
+    }
+  };
   // 마우스를 누르는 순간 그리기 작업을 시작 한다.
   this.touchstart = function (ev) {
     context.beginPath();
@@ -96,14 +118,23 @@ function tool_pencil() {
 function ev_canvas(ev) {
   if (ev.layerX || ev.layerX == 0) {
     // Firefox 브라우저
-    ev._x = ev.layerX;
-    ev._y = ev.layerY;
+    var bound = canvas.getBoundingClientRect();
+
+    //ev._x = ev.layerX;
+    ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
+    //ev._y = ev.layerY;
+    ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
   } else if (ev.offsetX || ev.offsetX == 0) {
     // Opera 브라우저
-    ev._x = ev.offsetX;
-    ev._y = ev.offsetY;
+    //var bound = canvas.getBoundingClientRect();
+    //ev._x = ev.offsetX;
+    //ev._x = (ev.layerX - bound.left) * (canvas.width / bound.width);
+    //ev._y = ev.offsetY;
+    //ev._y = (ev.layerY - bound.top) * (canvas.height / bound.height);
   } else if (ev.targetTouches[0] || ev.targetTouches[0].pageX == 0) {
     //핸드폰
+
+    /*
     var left = 0;
     var top = 0;
     var elem = document.getElementById("Inputcanvas");
@@ -113,9 +144,12 @@ function ev_canvas(ev) {
       top = top + parseInt(elem.offsetTop);
       elem = elem.offsetParent;
     }
-
-    ev._x = ev.targetTouches[0].pageX - left;
-    ev._y = ev.targetTouches[0].pageY - top;
+    */
+    var bound = canvas.getBoundingClientRect();
+    //ev._x = ev.targetTouches[0].pageX - left;
+    //ev._y = ev.targetTouches[0].pageY - top;
+    ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
+    ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
   }
   // tool의 이벤트 핸들러를 호출한다.
   var func = tool[ev.type];
