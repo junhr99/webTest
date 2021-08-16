@@ -121,9 +121,13 @@ function ev_canvas(ev) {
     var bound = canvas.getBoundingClientRect();
 
     //ev._x = ev.layerX;
-    ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
     //ev._y = ev.layerY;
+
+    ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
     ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
+
+    //ev._x = ev.pageX - canvas.offsetLeft;
+    //ev._y = ev.pageY - canvas.offsetTop;
   } else if (ev.offsetX || ev.offsetX == 0) {
     // Opera 브라우저
     //var bound = canvas.getBoundingClientRect();
@@ -148,8 +152,10 @@ function ev_canvas(ev) {
     var bound = canvas.getBoundingClientRect();
     //ev._x = ev.targetTouches[0].pageX - left;
     //ev._y = ev.targetTouches[0].pageY - top;
-    ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
-    ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
+    //ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
+    //ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
+    ev._x = ev.changedTouches[0].pageX - canvas.offsetLeft;
+    ev._y = ev.changedTouches[0].pageY - canvas.offsetTop;
   }
   // tool의 이벤트 핸들러를 호출한다.
   var func = tool[ev.type];
