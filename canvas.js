@@ -122,8 +122,8 @@ function touchdraw(e) {
     case "touchstart":
       {
         e.preventDefault(); // 더블클릭했을 때 캔버스 지정하게 되어서 파란색으로 반전되는 것 막음
-        tstartX = canvasX(e.changedTouches[0].pageX - canvas[0].offsetLeft);
-        tstartY = canvasY(e.changedTouches[0].pageY - canvas[0].offsetTop);
+        tstartX = canvasX(e.changedTouches[0].pageX);
+        tstartY = canvasY(e.changedTouches[0].pageY);
         tdrawing = true;
       }
       break;
@@ -135,8 +135,8 @@ function touchdraw(e) {
 
     case "touchmove": {
       if (!tdrawing) return; // 마우스가 눌러지지 않았으면 리턴
-      var curX = canvasX(e.changedTouches[0].pageX - canvas[0].offsetLeft),
-        curY = canvasY(e.changedTouches[0].pageY - canvas[0].offsetTop);
+      var curX = canvasX(e.changedTouches[0].pageX),
+        curY = canvasY(e.changedTouches[0].pageY);
       draw(curX, curY);
       tstartX = curX;
       tstartY = curY;
