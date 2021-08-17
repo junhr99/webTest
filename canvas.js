@@ -29,6 +29,7 @@ function init() {
   context.lineWidth = 1.5; // 선 굵기를 1.5로 설정
   context.strokeStyle = "white";
   context.lineCap = "round";
+
   /*
 
   // 마우스 리스너 등록. e는 MouseEvent 객체
@@ -102,6 +103,8 @@ function tool_pencil() {
   this.touchmove = function (ev) {
     if (tool.started) {
       ev.preventDefault();
+      ev.stopPropagation();
+
       context.lineTo(ev._x, ev._y);
       context.stroke();
     }
@@ -153,10 +156,10 @@ function ev_canvas(ev) {
     var bound = canvas.getBoundingClientRect();
     //ev._x = ev.targetTouches[0].pageX - left;
     //ev._y = ev.targetTouches[0].pageY - top;
-    ev._x = ev.targetTouches[0].pageX - canvas.offsetLeft;
-    ev._y = ev.targetTouches[0].pageY - canvas.offsetTop;
-    //ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
-    //ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
+    //ev._x = ev.targetTouches[0].pageX - canvas.offsetLeft;
+    //ev._y = ev.targetTouches[0].pageY - canvas.offsetTop;
+    ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
+    ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
     //ev._x =(ev.targetTouches[0].pageX - bound.left) * (canvas.width / bound.width);
     //ev._y =(ev.targetTouches[0].pageY - bound.right) *(canvas.height / bound.height);
   }
