@@ -153,15 +153,12 @@ function ev_canvas(ev) {
     var bound = canvas.getBoundingClientRect();
     //ev._x = ev.targetTouches[0].pageX - left;
     //ev._y = ev.targetTouches[0].pageY - top;
-    //ev._x = ev.targetTouches[0].pageX - canvas.offsetLeft;
-    //ev._y = ev.targetTouches[0].pageY - canvas.offsetTop;
+    ev._x = ev.targetTouches[0].pageX - canvas.offsetLeft;
+    ev._y = ev.targetTouches[0].pageY - canvas.offsetTop;
     //ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
     //ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
-    ev._x =
-      (ev.targetTouches[0].pageX - bound.left) * (canvas.width / bound.width);
-    ev._y =
-      (ev.targetTouches[0].pageY - bound.right) *
-      (canvas.height / bound.height);
+    //ev._x =(ev.targetTouches[0].pageX - bound.left) * (canvas.width / bound.width);
+    //ev._y =(ev.targetTouches[0].pageY - bound.right) *(canvas.height / bound.height);
   }
   // tool의 이벤트 핸들러를 호출한다.
   var func = tool[ev.type];
