@@ -171,7 +171,7 @@ function tool_pencil() {
   this.touchmove = function (ev) {
     if (tool.started) {
       ev.preventDefault();
-      //ev.stopPropagation();
+      ev.stopPropagation();
 
       context.lineTo(ev._x, ev._y);
       context.stroke();
