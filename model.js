@@ -14,7 +14,7 @@ async function loadModel() {
 
 function reconstruct(encoder, decoder, x) {
   z = encoder.predict(x);
-  z = z.div(tf.norm(z, 2, 3, true));  // spherical projection
+  z = z.div(tf.norm(z, 2, 3, true)); // spherical projection
   return decoder.predict(z);
 }
 

@@ -170,8 +170,8 @@ function tool_pencil() {
   // 마우스가 이동하는 동안 계속 호출하여 Canvas에 Line을 그려 나간다
   this.touchmove = function (ev) {
     if (tool.started) {
-      ev.preventDefault();
-      ev.stopPropagation();
+      //ev.preventDefault();
+      //ev.stopPropagation();
 
       context.lineTo(ev._x, ev._y);
       context.stroke();
