@@ -8,8 +8,8 @@ function load_image(image_name) {
     ctx.drawImage(image, 0, 0, 28, 28);
   });
 }
-
-var canvas, context, tool;
+/* 1번
+var canvas, context;
 var AEcan, AEcon;
 var NAEcan, NAEcon;
 
@@ -29,8 +29,6 @@ function init() {
   context.lineWidth = 1.5; // 선 굵기를 1.5로 설정
   context.strokeStyle = "white";
   context.lineCap = "round";
-
-  /*
 
   // 마우스 리스너 등록. e는 MouseEvent 객체
   canvas.addEventListener(
@@ -61,7 +59,77 @@ function init() {
     },
     false
   ); // 캔버스에서 마우스가 벗어났을 때 발생되는 이벤트
+}
+
+var startX = 0,
+  startY = 0; // 드래깅동안, 처음 마우스가 눌러진 좌표
+var drawing = false;
+
+function canvasX(clientX) {
+  var bound = canvas.getBoundingClientRect();
+  console.log(canvas.width);
+  console.log(bound.width);
+  return (clientX - bound.left) * (canvas.width / bound.width);
+}
+
+function canvasY(clientY) {
+  var bound = canvas.getBoundingClientRect();
+  return (clientY - bound.top) * (canvas.height / bound.height);
+}
+
+function draw(curX, curY) {
+  context.beginPath(); // 마우스를 누르고 움직일 때마다 시작점을 재지정
+  context.moveTo(startX, startY);
+  context.lineTo(curX, curY); // 마우스 시작점부터 현재 점까지 라인 그리기
+  context.stroke();
+}
+
+function down(e) {
+  e.preventDefault(); // 더블클릭했을 때 캔버스 지정하게 되어서 파란색으로 반전되는 것 막음
+  startX = canvasX(e.clientX);
+  startY = canvasY(e.clientY);
+  drawing = true;
+}
+
+function up(e) {
+  drawing = false;
+}
+
+function move(e) {
+  if (!drawing) return; // 마우스가 눌러지지 않았으면 리턴
+  var curX = canvasX(e.clientX),
+    curY = canvasY(e.clientY);
+  draw(curX, curY);
+  startX = curX;
+  startY = curY;
+}
+
+function out(e) {
+  drawing = false;
+}
 */
+
+var canvas, context, tool;
+var AEcan, AEcon;
+var NAEcan, NAEcon;
+
+function init() {
+  document.getElementById("AErecon").innerHTML = "0";
+  document.getElementById("NAErecon").innerHTML = "0";
+
+  canvas = document.getElementById("Inputcanvas");
+  context = canvas.getContext("2d");
+
+  AEcan = document.getElementById("AEcanvas");
+  AEcon = AEcan.getContext("2d");
+
+  NAEcan = document.getElementById("NAEcanvas");
+  NAEcon = NAEcan.getContext("2d");
+
+  context.lineWidth = 1.5; // 선 굵기를 1.5로 설정
+  context.strokeStyle = "white";
+  context.lineCap = "round";
+
   tool = new tool_pencil();
   canvas.addEventListener("mousedown", ev_canvas, false);
   canvas.addEventListener("mousemove", ev_canvas, false);
@@ -142,24 +210,14 @@ function ev_canvas(ev) {
   } else if (ev.targetTouches[0] || ev.targetTouches[0].pageX == 0) {
     //핸드폰
 
-    /*
-    var left = 0;
-    var top = 0;
-    var elem = document.getElementById("Inputcanvas");
-
-    while (elem) {
-      left = left + parseInt(elem.offsetLeft);
-      top = top + parseInt(elem.offsetTop);
-      elem = elem.offsetParent;
-    }
-    */
     var bound = canvas.getBoundingClientRect();
     //ev._x = ev.targetTouches[0].pageX - left;
     //ev._y = ev.targetTouches[0].pageY - top;
     //ev._x = ev.targetTouches[0].pageX - canvas.offsetLeft;
     //ev._y = ev.targetTouches[0].pageY - canvas.offsetTop;
-    ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
-    ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
+    ev._x = (ev.touches[0].clientX - bound.left) * (canvas.width / bound.width);
+    ev._y =
+      (ev.touches[0].clientY - bound.top) * (canvas.height / bound.height);
     //ev._x =(ev.targetTouches[0].pageX - bound.left) * (canvas.width / bound.width);
     //ev._y =(ev.targetTouches[0].pageY - bound.right) *(canvas.height / bound.height);
   }
@@ -215,7 +273,7 @@ function out(e) {
   drawing = false;
 }
 
-/*
+/* 3번
 var canvas, context;
 var AEcan, AEcon;
 var NAEcan, NAEcon;
@@ -352,7 +410,7 @@ function touchdraw(e) {
 }
 */
 
-/*
+/* 4번
 var canvas, context, tool;
 var AEcan, AEcon, NAEcan, NAEcon;
 function init() {
@@ -460,7 +518,7 @@ function ev_canvas(ev) {
 }
 */
 
-/*
+/* 5번
 var canvas, context;
 var AEcan, AEcon;
 var NAEcan, NAEcon;
