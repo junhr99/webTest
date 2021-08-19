@@ -128,7 +128,7 @@ function tdown(e) {
   e.stopPropagation();
   tstartX = canvasX(e.touches[0].clientX);
   tstartY = canvasY(e.touches[0].clientY);
-  drawing = true;
+  tdrawing = true;
 }
 
 function up(e) {
@@ -136,7 +136,7 @@ function up(e) {
 }
 
 function tup(e) {
-  drawing = false;
+  tdrawing = false;
 }
 
 function move(e) {
@@ -149,7 +149,7 @@ function move(e) {
 }
 
 function tmove(e) {
-  if (!drawing) return; // 마우스가 눌러지지 않았으면 리턴
+  if (!tdrawing) return; // 마우스가 눌러지지 않았으면 리턴
   var curX = canvasX(e.touches[0].clientX),
     curY = canvasY(e.touched[0].clientY);
   tdraw(curX, curY);
