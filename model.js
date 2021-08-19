@@ -30,6 +30,9 @@ function make_prediction() {
 
   var testimg = new Image();
   testimg = Inctx.getImageData(0, 0, 28, 28);
+  for (var i = 3; i < testimg.data.length; i += 4) {
+    testimg.data[i] = 255;
+  }
 
   const input = tf.tidy(() => {
     const img = tf.browser.fromPixels(testimg, 1);
@@ -52,13 +55,24 @@ function make_prediction() {
 
   img.onload = function () {
     var AEImageData = Inctx.getImageData(0, 0, 28, 28);
+
     var NAEImageData = Inctx.getImageData(0, 0, 28, 28);
+    /*
+    for (var i = 3; i < AEImageData.data.length; i += 4) {
+      AEImageData.data[i] = 255;
+      NAEImageData.data[i] = 255;
+    }
+    */
+    //const AEtest = AEImageData;
+    //const NAEtest = NAEImageData;
     editPixels(AEImageData.data, ae_values);
     editPixels(NAEImageData.data, nae_values);
     drawEditedImage(AEctx, AEImageData);
     drawEditedImage(NAEctx, NAEImageData);
     reconError("AErecon", testimg.data, AEImageData.data);
     reconError("NAErecon", testimg.data, NAEImageData.data);
+    //reconError("AErecon", AEtest.data, AEImageData.data);
+    //reconError("NAErecon", NAEtest.data, NAEImageData.data);
   };
 
   function reconError(elementid, beforeData, afterData) {
@@ -82,7 +96,7 @@ function make_prediction() {
       imgData[i] = values[0][x][y];
       imgData[i + 1] = values[0][x][y];
       imgData[i + 2] = values[0][x][y];
-      //imgData[i + 3] = 255;
+      imgData[i + 3] = 255;
 
       y = y + 1;
       if (y == 28) {

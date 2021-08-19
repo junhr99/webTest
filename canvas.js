@@ -8,7 +8,7 @@ function load_image(image_name) {
     ctx.drawImage(image, 0, 0, 28, 28);
   });
 }
-/* 1번
+
 var canvas, context;
 var AEcan, AEcon;
 var NAEcan, NAEcon;
@@ -59,11 +59,36 @@ function init() {
     },
     false
   ); // 캔버스에서 마우스가 벗어났을 때 발생되는 이벤트
+  canvas.addEventListener(
+    "touchstart",
+    function (e) {
+      tdown(e);
+    },
+    false
+  );
+  canvas.addEventListener(
+    "touchmove",
+    function (e) {
+      tmove(e);
+    },
+    false
+  );
+  canvas.addEventListener(
+    "touchend",
+    function (e) {
+      tup(e);
+    },
+    false
+  );
 }
 
 var startX = 0,
   startY = 0; // 드래깅동안, 처음 마우스가 눌러진 좌표
 var drawing = false;
+
+var tstartX = 0,
+  tstartY = 0;
+var tdrawing = false;
 
 function canvasX(clientX) {
   var bound = canvas.getBoundingClientRect();
@@ -84,6 +109,13 @@ function draw(curX, curY) {
   context.stroke();
 }
 
+function tdraw(curX, curY) {
+  context.beginPath(); // 마우스를 누르고 움직일 때마다 시작점을 재지정
+  context.moveTo(tstartX, tstartY);
+  context.lineTo(curX, curY); // 마우스 시작점부터 현재 점까지 라인 그리기
+  context.stroke();
+}
+
 function down(e) {
   e.preventDefault(); // 더블클릭했을 때 캔버스 지정하게 되어서 파란색으로 반전되는 것 막음
   startX = canvasX(e.clientX);
@@ -91,7 +123,19 @@ function down(e) {
   drawing = true;
 }
 
+function tdown(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  tstartX = canvasX(e.touches[0].clientX);
+  tstartY = canvasY(e.touches[0].clientY);
+  drawing = true;
+}
+
 function up(e) {
+  drawing = false;
+}
+
+function tup(e) {
   drawing = false;
 }
 
@@ -104,11 +148,20 @@ function move(e) {
   startY = curY;
 }
 
+function tmove(e) {
+  if (!drawing) return; // 마우스가 눌러지지 않았으면 리턴
+  var curX = canvasX(e.touches[0].clientX),
+    curY = canvasY(e.touched[0].clientY);
+  tdraw(curX, curY);
+  tstartX = curX;
+  tstartY = curY;
+}
+
 function out(e) {
   drawing = false;
 }
-*/
 
+/* 2번
 var canvas, context, tool;
 var AEcan, AEcon;
 var NAEcan, NAEcon;
@@ -272,6 +325,7 @@ function move(e) {
 function out(e) {
   drawing = false;
 }
+*/
 
 /* 3번
 var canvas, context;
