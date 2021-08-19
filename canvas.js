@@ -9,6 +9,117 @@ function load_image(image_name) {
   });
 }
 
+var canvas, context, tool;
+var AEcan, AEcon;
+var NAEcan, NAEcon;
+
+function init() {
+  document.getElementById("AErecon").innerHTML = "0";
+  document.getElementById("NAErecon").innerHTML = "0";
+
+  canvas = document.getElementById("Inputcanvas");
+  context = canvas.getContext("2d");
+
+  AEcan = document.getElementById("AEcanvas");
+  AEcon = AEcan.getContext("2d");
+
+  NAEcan = document.getElementById("NAEcanvas");
+  NAEcon = NAEcan.getContext("2d");
+
+  context.lineWidth = 1.5; // 선 굵기를 1.5로 설정
+  context.strokeStyle = "white";
+  context.lineCap = "round";
+
+  tool = new tool_pencil();
+  canvas.addEventListener("mousedown", ev_canvas, false);
+  canvas.addEventListener("mousemove", ev_canvas, false);
+  canvas.addEventListener("mouseup", ev_canvas, false);
+  canvas.addEventListener("mouseout", ev_canvas, false);
+  canvas.addEventListener("touchstart", ev_canvas, false);
+  canvas.addEventListener("touchmove", ev_canvas, false);
+  canvas.addEventListener("touchend", ev_canvas, false);
+}
+
+function tool_pencil() {
+  var tool = this;
+  this.started = false;
+  this.mousedown = function (ev) {
+    context.beginPath();
+    context.moveTo(ev._x, ev._y);
+    tool.started = true;
+  };
+  // 마우스가 이동하는 동안 계속 호출하여 Canvas에 Line을 그려 나간다
+  this.mousemove = function (ev) {
+    if (tool.started) {
+      ev.preventDefault();
+      //ev.stopPropagation();
+      context.lineTo(ev._x, ev._y);
+      context.stroke();
+    }
+  };
+  // 마우스 떼면 그리기 작업을 중단한다
+  this.mouseup = function (ev) {
+    if (tool.started) {
+      tool.mousemove(ev);
+      tool.started = false;
+    }
+  };
+
+  this.mouseout = function (ev) {
+    //ev.preventDefault();
+
+    tool.started = false;
+  };
+
+  // 마우스를 누르는 순간 그리기 작업을 시작 한다.
+  this.touchstart = function (ev) {
+    context.beginPath();
+    context.moveTo(ev._x, ev._y);
+    tool.started = true;
+  };
+  // 마우스가 이동하는 동안 계속 호출하여 Canvas에 Line을 그려 나간다
+  this.touchmove = function (ev) {
+    if (tool.started) {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      context.lineTo(ev._x, ev._y);
+      context.stroke();
+    }
+  };
+  // 마우스 떼면 그리기 작업을 중단한다
+  this.touchend = function (ev) {
+    if (tool.started) {
+      tool.touchmove(ev);
+      tool.started = false;
+    }
+  };
+}
+
+// Canvas요소 내의 좌표를 결정 한다.
+function ev_canvas(ev) {
+  if (ev.layerX || ev.layerX == 0) {
+    // 브라우저
+    var bound = canvas.getBoundingClientRect();
+    ev._x = (ev.clientX - bound.left) * (canvas.width / bound.width);
+    ev._y = (ev.clientY - bound.top) * (canvas.height / bound.height);
+  } else if (ev.targetTouches[0] || ev.targetTouches[0].pageX == 0) {
+    //핸드폰
+
+    var bound = canvas.getBoundingClientRect();
+
+    ev._x = (ev.touches[0].clientX - bound.left) * (canvas.width / bound.width);
+    ev._y =
+      (ev.touches[0].clientY - bound.top) * (canvas.height / bound.height);
+  }
+  // tool의 이벤트 핸들러를 호출한다.
+  var func = tool[ev.type];
+  if (func) {
+    func(ev);
+  }
+}
+
+/* 1번
 var canvas, context;
 var AEcan, AEcon;
 var NAEcan, NAEcon;
@@ -161,6 +272,8 @@ function out(e) {
   drawing = false;
 }
 
+*/
+
 /* 2번
 var canvas, context, tool;
 var AEcan, AEcon;
@@ -203,6 +316,7 @@ function tool_pencil() {
   // 마우스가 이동하는 동안 계속 호출하여 Canvas에 Line을 그려 나간다
   this.mousemove = function (ev) {
     if (tool.started) {
+      ev.preventDefault();
       context.lineTo(ev._x, ev._y);
       context.stroke();
     }
