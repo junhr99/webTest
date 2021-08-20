@@ -555,7 +555,8 @@ function touchdraw(e) {
   switch (e.type) {
     case "touchstart":
       {
-        e.preventDefault(); // 더블클릭했을 때 캔버스 지정하게 되어서 파란색으로 반전되는 것 막음
+        e.preventDefault();
+        e.stopPropagation();
         tstartX = canvasX(e.touches[0].clientX);
         tstartY = canvasY(e.touches[0].clientY);
         tdrawing = true;
